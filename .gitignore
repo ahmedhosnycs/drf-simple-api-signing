@@ -1,0 +1,15 @@
+__pycache__/
+build/
+dist/
+*.py[cod]
+*.egg-info
+.ropeproject
+.tox
+.coverage
+src/
+.venv
+.idea
+docs/_build/
+.eggs/
+.python-version
+.pytest_cache/

@@ -25,14 +25,14 @@ setup(
         'Framework :: Django',
         'Framework :: Django :: 2.0',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU GENERAL PUBLIC LICENSE',
+        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-        'Topic :: Server-side Development :: HTTP Request Signing',
-        'Topic :: Django :: Security :: HTTP Request Signing',
         'Topic :: Internet',
+        'Topic :: Security',
         'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Internet :: WWW/HTTP :: WSGI :: Application'
     ],
 )

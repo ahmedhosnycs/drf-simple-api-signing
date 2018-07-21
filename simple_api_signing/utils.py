@@ -5,6 +5,8 @@ from base64 import b64encode
 
 from django.conf import settings
 
+from simple_api_signing.exceptions import SignatureMissMatch
+
 
 class APISigningFlow(object):
     """APISigningFlow controls signing flow."""
@@ -15,7 +17,7 @@ class APISigningFlow(object):
         self.signature_fields = getattr(
             settings,
             "SA_SIGNING_FIELDS",
-            ['body', 'path', 'method']  # DEFAULT VALUES
+            ['path', 'method']  # DEFAULT VALUES
         )
         self.hash_func_name = getattr(
             settings, "SA_SIGNING_HASH_FUNCTION", "sha256"
@@ -64,4 +66,4 @@ class APISigningFlow(object):
         return fields_values
 
     def not_valid_handler(self):
-        raise Exception("Signature Missmatch")
+        raise SignatureMissMatch("Signature Missmatch")

@@ -30,8 +30,9 @@ class APISigningFlow(object):
     def is_valid(self, request):
         """Compare signature with the expected."""
         api_signature = request.META.get('HTTP_SIGNATURE')
-        fields_values = self._get_fields_values(self, request)
+        fields_values = self._get_fields_values(request)
         message = self.delimeter.join(fields_values)
+        message = message.encode('utf-8')
         computed_signature = hmac.new(
             self.secret_key.encode('utf-8'),
             msg=message,
@@ -50,6 +51,8 @@ class APISigningFlow(object):
                 value = getattr(request, field)
             except AttributeError:
                 value = getattr(request.META, field, None)
+            except ValueError:
+                pass
             if not value:
                 raise ValueError(
                     "{} cannot be resolved from request object".format(field)

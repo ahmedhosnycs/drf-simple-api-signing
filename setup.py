@@ -1,5 +1,5 @@
 import os
-from setuptools import find_packages, setup
+from setuptools import setup
 
 with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
     README = readme.read()
@@ -15,6 +15,7 @@ setup(
     license='GNU GENERAL PUBLIC LICENSE',
     description='A simple Django package to facilitate request signing.',
     long_description=README,
+    install_requires=['django>=1.8.0'],
     url='',
     author='Ahmed Hosny Ibrahim',
     author_email='me@ahmedhosnycs.com',

@@ -1,12 +1,6 @@
 language: python
 install:
   - pip install tox
-env:
-  - TOXENV=py35-django110-drf
-  - TOXENV=py36-django110-drf
-  - TOXENV=py35-djangolatest-drf
-  - TOXENV=py36-djangolatest-drf
-  - TOXENV=quality
 matrix:
   include:
     - python: 3.5

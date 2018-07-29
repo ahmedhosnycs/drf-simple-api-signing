@@ -5,7 +5,9 @@ from base64 import b64encode
 
 from django.conf import settings
 
-from simple_api_signing.exceptions import SignatureMissMatch
+from simple_api_signing.exceptions import (APIAccessDenied,
+                                           SignatureHeaderMissing,
+                                           SignatureMissMatch)
 
 
 class APISigningFlow(object):
@@ -29,9 +31,14 @@ class APISigningFlow(object):
             exception_message = "Missing Simple API Signing Configuration. "
             raise AttributeError(exception_message + str(e))
 
-    def is_valid(self, request):
+    def is_valid(self, request, rest_exception=False):
         """Compare signature with the expected."""
-        api_signature = request.META.get('HTTP_SIGNATURE')
+        api_signature = request.META.get('HTTP_SIGNATURE', None)
+        if not api_signature:
+            if not rest_exception:
+                raise SignatureHeaderMissing()
+            raise APIAccessDenied()
+
         fields_values = self._get_fields_values(request)
         message = self.delimeter.join(fields_values)
         message = message.encode('utf-8')
@@ -65,5 +72,8 @@ class APISigningFlow(object):
         fields_values.append(self.secret_key)
         return fields_values
 
-    def not_valid_handler(self):
-        raise SignatureMissMatch("Signature Missmatch")
+    def not_valid_handler(self, rest_exception=False):
+        """Handler invoked when the signature is not valid."""
+        if not rest_exception:
+            raise SignatureMissMatch("Signature Missmatch")
+        raise APIAccessDenied()

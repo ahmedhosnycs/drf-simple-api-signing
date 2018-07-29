@@ -1,27 +1,50 @@
 # Simple API Signing for Django (SASigning)
+![](https://travis-ci.org/ahmedhosnycs/drf-simple-api-signing.svg?branch=master)
 
 ## STATUS
-* UNDER DEVELOPEMENT (21 July 2018)
+* First Release (29 July 2018)
 
 -----------------------------------------------------------
 -----------------------------------------------------------
 
 
-This package facilitates the way of API Signing in Django projects. This can be used when you are intending to build an API to add extra layer of security. One of the key features of this package is that it tries to maximaize the customization of security.
+This package facilitates the way of API Signing in Django projects. This can be used when you are intending to build an API to add an extra layer of security. One of the key features of this package is that it tries to maximaize the customization of security.
 
 If you want to understand more about how the API signing works, please check *Links section* below.
 
-*(Next releases will support different specific features for Django Rest Framework)*
 ## Quick Start
-This package is now available as a middleware.
+You can use this package in two modes:
 
-* To install the package, run the following command:
-```sh
-pip install django-simple-api-signing
+1. As a global middleware request signing.
+2. As a Django Rest Framework permission class.
+
+* First, install the package, run the following command:
+```
+pip install drf-simple-api-signing
 ```
 
-* Add "SASigningMiddleware" to your MIDDLEWARE setting like this:
-```py
+* Add your `Secret Key` that will be used in signature computation.
+```
+SA_SIGNING_SECRET_KEY = 'some-random-secret-key'
+```
+
+By adding this setting, your signature will be calculated using this secret key.
+
+
+By default, expected signature will be constructed using the following attributes:
+
+    * Endpoint (request.path)
+    * Method (GET, POST, PUT, ...)
+    * SA_SIGNING_SECRET_KEY
+    with empty delimeter and sha256 as a hashing function.
+
+### Global Middlware Mode
+
+
+* Add ***SASigningMiddleware*** to your `MIDDLEWARE` setting like this:
+
+
+```
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
@@ -35,31 +58,42 @@ pip install django-simple-api-signing
     ]
 ```
 
-* Add your `Secret Key` that will be used in signature computation.
+### DRF Permission Class
+
+* Inside a view, you can import the ***SASigningPermission*** permission.
+
 ```
-SA_SIGNING_SECRET_KEY = 'some-random-secret-key'
+from simple_api_signing.common.rest_permission import SASigningPermission
+class APIViewSet(ViewSet):
+    permission_classes = (SASigningPermission, )
+    ...
+    ...
 ```
 
-By adding those settings, now your middleware will check the signature and compare it 
-with the expected one.
+* You can also add this class in `settings.py`
 
-**Signature should always be sent as a Request Header with name `SIGNATURE`.**
+```
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': {
+        'simple_api_signing.common.rest_permission. SASigningPermission',
+    }
+}
+```
 
-By default, expected signature will be constructed using the following attributes:
 
-	* Endpoint (request.path)
-	* Method (GET, POST, PUT, ...)
-	* SA_SIGNING_SECRET_KEY
-	with empty delimeter and sha256 as a hashing function.
+***NOTE:*** **Signature should always be sent as a Request Header with name `SIGNATURE`.**
 
 ### Signature Setting Customization
+
 You can customize how the signature is computed using the following settings.
+
+
 
 **`SA_SIGNING_SECRET_KEY`**
 
 Required String. It is the secret key used in signature computation in both backend and API consumer.
 
-*(SECURITY Caution):*
+***(SECURITY Caution):***
 
 This secret key should be passed to API consumer in a secure way.
 
@@ -103,5 +137,3 @@ Contribution steps are simple:
 5. Create a branch from `develop`.
 6. Before submitting a Pull Request, make sure to rebase with the latest thing on `develop`.
 7. Collaborators will review, then you have to address their comments in your PR.
-
-

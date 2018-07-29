@@ -64,6 +64,8 @@ By default, expected signature will be constructed using the following attribute
 
 ```
 from simple_api_signing.common.rest_permission import SASigningPermission
+
+
 class APIViewSet(ViewSet):
     permission_classes = (SASigningPermission, )
     ...

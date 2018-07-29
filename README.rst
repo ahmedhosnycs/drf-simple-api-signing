@@ -18,12 +18,12 @@ You can use this package in two modes:
 2. As a Django Rest Framework permission class.
 
 * First, install the package, run the following command:
-```
+```sh
 pip install drf-simple-api-signing
 ```
 
 * Add your `Secret Key` that will be used in signature computation.
-```
+```py
 SA_SIGNING_SECRET_KEY = 'some-random-secret-key'
 ```
 
@@ -43,7 +43,7 @@ By default, expected signature will be constructed using the following attribute
 * Add ***SASigningMiddleware*** to your `MIDDLEWARE` setting like this:
 
 
-```
+```py
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
@@ -61,8 +61,10 @@ By default, expected signature will be constructed using the following attribute
 
 * Inside a view, you can import the ***SASigningPermission*** permission.
 
-```
+```py
 from simple_api_signing.common.rest_permission import SASigningPermission
+
+
 class APIViewSet(ViewSet):
     permission_classes = (SASigningPermission, )
     ...
@@ -71,7 +73,7 @@ class APIViewSet(ViewSet):
 
 * You can also add this class in `settings.py`
 
-```
+```py
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': {
         'simple_api_signing.common.rest_permission. SASigningPermission',

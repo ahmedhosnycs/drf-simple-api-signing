@@ -7,5 +7,22 @@ env:
   - TOXENV=py35-djangolatest-drf
   - TOXENV=py36-djangolatest-drf
   - TOXENV=quality
+matrix:
+  include:
+    - python: 3.5
+      env:
+        - TOXENV=py35-django110-drf
+    - python: 3.5
+      env:
+        - TOXENV=py35-djangolatest-drf
+    - python: 3.6
+      env:
+        - TOXENV=py36-django110-drf
+    - python: 3.6
+      env:
+        - TOXENV=py35-djangolatest-drf
+    - python: 3.6
+      env:
+        - TOXENV=quality
 script:
   - tox

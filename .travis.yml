@@ -14,7 +14,7 @@ matrix:
         - TOXENV=py36-django110-drf
     - python: 3.6
       env:
-        - TOXENV=py35-djangolatest-drf
+        - TOXENV=py36-djangolatest-drf
     - python: 3.6
       env:
         - TOXENV=quality

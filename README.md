@@ -1,5 +1,6 @@
 # Simple API Signing for Django (SASigning)
 ![](https://travis-ci.org/ahmedhosnycs/drf-simple-api-signing.svg?branch=master)
+[![Documentation Status](https://readthedocs.org/projects/drf-simple-api-signing/badge/?version=latest)](https://drf-simple-api-signing.readthedocs.io/en/latest/?badge=latest)
 
 ## STATUS
 * First Release (29 July 2018)
@@ -7,7 +8,7 @@
 -----------------------------------------------------------
 -----------------------------------------------------------
 
-This package facilitates the way of API Signing in Django projects. This can be used when you are intending to build an API to add an extra layer of security. One of the key features of this package is that it tries to maximaize the customization of security.
+This package facilitates the way of API Signing in Django and DRF projects. This can be used when you are intending to build an API to add an extra layer of security. One of the key features of this package is that it tries to maximaize the customization of security.
 
 If you want to understand more about how the API signing works, please check *Links section* below.
 

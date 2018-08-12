@@ -60,6 +60,7 @@ b64encode(computed_sig).decode()
 NodeJS:
 ```
 var cryto = require('crypto');
+
 var data = path + '' + method + '' + secret
 var hash = crypto.createHmac('sha256', secret).update(data);
 hash.digest('base64');

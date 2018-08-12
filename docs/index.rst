@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Simple API Signing for Django (**drf-simple-api-signing**'s) documentation!
-======================================================================================
+Welcome to DRF Simple API Signing documentation!
+================================================
 
 Description
 -----------

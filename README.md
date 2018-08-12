@@ -7,120 +7,112 @@
 -----------------------------------------------------------
 -----------------------------------------------------------
 
-
 This package facilitates the way of API Signing in Django projects. This can be used when you are intending to build an API to add an extra layer of security. One of the key features of this package is that it tries to maximaize the customization of security.
 
 If you want to understand more about how the API signing works, please check *Links section* below.
 
 ## Quick Start
-You can use this package in two modes:
-
-1. As a global middleware request signing.
-2. As a Django Rest Framework permission class.
-
-* First, install the package, run the following command:
+* First, install the package and run the following command:
 ```
 pip install drf-simple-api-signing
 ```
 
-* Add your `Secret Key` that will be used in signature computation.
+### Setup
+* Add the `SA_SIGNING_SECRET_KEY` in `settings.py`. It will be used in signature computation.
 ```
-SA_SIGNING_SECRET_KEY = 'some-random-secret-key'
-```
-
-By adding this setting, your signature will be calculated using this secret key.
-
-
-By default, expected signature will be constructed using the following attributes:
-
-    * Endpoint (request.path)
-    * Method (GET, POST, PUT, ...)
-    * SA_SIGNING_SECRET_KEY
-    with empty delimeter and sha256 as a hashing function.
-
-### Global Middlware Mode
-
-
-* Add ***SASigningMiddleware*** to your `MIDDLEWARE` setting like this:
-
-
-```
-    MIDDLEWARE = [
-        'django.middleware.security.SecurityMiddleware',
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'django.middleware.common.CommonMiddleware',
-        'django.middleware.csrf.CsrfViewMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
-        'django.middleware.clickjacking.XFrameOptionsMiddleware',
-        # Add the end of middlewares
-        'simple_api_signing.common.middleware.SASigningMiddleware',
-    ]
+SA_SIGNING_SECRET_KEY = 'some-strong-random-secret-key'
 ```
 
-### DRF Permission Class
-
-* Inside a view, you can import the ***SASigningPermission*** permission.
-
-```
-from simple_api_signing.common.rest_permission import SASigningPermission
-
-
-class APIViewSet(ViewSet):
-    permission_classes = (SASigningPermission, )
-    ...
-    ...
-```
-
-* You can also add this class in `settings.py`
+* Also you have to add the permission class in the `Rest Framework` configuration in  `settings.py`
 
 ```
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': {
-        'simple_api_signing.common.rest_permission. SASigningPermission',
-    }
+        'simple_api_signing.common.rest_permission.SASigningPermission',
+    },
+    ...
 }
 ```
+**All the endpoints in your project will be protected with this signing.**
+
+### How to use it
+Now we have our API ready to listen signed requests.
+
+All the requests have to be sent with a `SIGNATURE` header with the correct value.
+
+This `SIGNATURE` header has to contain the correct value. To generate the correct signature we can to do it in all the languages: Python, JS, PHP, Java, etc.
+
+Python:
+```
+import hashlib
+import hmac
+from base64 import b64encode
+
+data = ''.join([path, method, secret])
+computed_sig = hmac.new(
+                secret.encode('utf-8'), 
+                msg=data.encode('utf-8'),
+                digestmod=sha256
+               ).digest()
+b64encode(computed_sig).decode()
+```
+
+NodeJS:
+```
+var cryto = require('crypto');
+var data = path + '' + method + '' + secret
+var hash = crypto.createHmac('sha256', secret).update(data);
+hash.digest('base64');
+```
+
+Where:
+* `secret` is the value that you put in `SA_SIGNING_SECRET_KEY`
+* `path` is the part of the request without the domain and query params. With slash. Example: /login
+* `method` is the HTTP method. Example: GET, POST, PUT, DELETE
+
+**Note that this is the example by default, you can check the documentation to add more complexity or change some parts**
+
+Then with this signature you can call the API and will be validated.
 
 
-***NOTE:*** **Signature should always be sent as a Request Header with name `SIGNATURE`.**
+## Remove signing from specific endpoints
+If you want to remove the permission clss in some endpoint you can remove it using
+this in your views:
+```
+class ExampleViewSet(ViewSet):
+    permission_classes = ()
+    ...
+```
+Now all the `ExampleViewSet` will be unprotected without the signing.
 
-### Signature Setting Customization
+## Add signing in specific endpoints
+If you want to use this signing only in some endpoints you don't have to put the 
+permission class in the default configuration of `Django Rest Framework` in `settings.py`.
 
-You can customize how the signature is computed using the following settings.
-
-
-
-**`SA_SIGNING_SECRET_KEY`**
-
-Required String. It is the secret key used in signature computation in both backend and API consumer.
-
-***(SECURITY Caution):***
-
-This secret key should be passed to API consumer in a secure way.
-
-This version supports only one consumer with one secret key
+* Remove the `SASigningPermission` class from `DEFAULT_PERMISSION_CLASSES` in `REST_FRAMEWORK` in the `settings.py` file if you put it.
+* Add the permission directly in the specific view:
+```
+from simple_api_signing.common.rest_permission import SASigningPermission
 
 
-**`SA_SIGNING_DELIMETER`**
+class ExampleViewSet(ViewSet):
+    permission_classes = (SASigningPermission,)
+    ...
+```
 
-Optional String. By default `''`
+## Use it directy with Django, without DRF
+This package also is compatible using only django, without django rest framework.
 
-**`SA_SIGNING_FIELDS`**
+Instead of putting the `permission_class` in `settings.py` we have to add **SASigningMiddleware** to the `MIDDLEWARE` setting like this:
 
-Optional List. by default `['path', 'method']`.
+**NOTE: if you want to use the middleware you can't do it with an specific endpoint.**
 
-It is a list of attributes that are resolved from `request` object.
-
-If not found in `request` object, it tries to be resolved from `request.META`.
-
-If not found a `ValueError` exception is raised.
-
-**`SA_SIGNING_HASH_FUNCTION`**
-
-Optional String. By default `sha256`.
-
-You can use any hash function from `hashlib` [library](https://docs.python.org/3/library/hashlib.html).
+```
+    MIDDLEWARE = [
+        ..,
+        'simple_api_signing.common.middleware.SASigningMiddleware',
+    ]
+```
 
 
 ## Links
@@ -137,5 +129,5 @@ Contribution steps are simple:
 3. Once it is approved, it will be labeled with `accepted`.
 4. Fork the repo and make sure that all unit tests are working on your development environment.
 5. Create a branch from `develop`.
-6. Before submitting a Pull Request, make sure to rebase with the latest thing on `develop`.
+6. Before submitting a Pull Request, make sure to rebase with the latest commit on `develop`.
 7. Collaborators will review, then you have to address their comments in your PR.

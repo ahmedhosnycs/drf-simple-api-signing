@@ -1,11 +1,6 @@
-===============================================
-DRF Simple API Signing (SASigning) Introduction
-===============================================
-
-STATUS
-^^^^^^
-
-* First Release (29 July 2018)
+============
+Introduction
+============
 
 API Signing Benefits
 --------------------
@@ -35,12 +30,3 @@ What SASigning Do?
 
 SASigning provides an easy way to configure your API to accept, check and define signatures.
 It allows you to review plugin the signature checking in your flow.
-
-
-========================
-SASIGNING DOCUMENTATION
-========================
-
-* Visit Docs_.
-
-.. _Docs: https://readthedocs.org/

@@ -18,6 +18,8 @@ SASigning facilitates the way of API Signing in Django projects. This can be use
 
    drf-simple-api-signing/introduction.rst
    drf-simple-api-signing/installation-and-how-it-works.rst
+   drf-simple-api-signing/advanced.rst
+   drf-simple-api-signing/references.rst
 
 
 

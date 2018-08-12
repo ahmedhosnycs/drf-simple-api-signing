@@ -1,6 +1,6 @@
-============
-Installation
-============
+==========================
+Installation & Quick Start
+==========================
 
 To install the package, run the following command in your virtual environment
 
@@ -44,6 +44,7 @@ Sometimes you want specific endpoint to be avaliable for public consumers, it ca
 
 Apply API Signing Checking only For Specific Endpoint
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Instead of adding this to ``DEFAULT_PERMISSION_CLASSES``, you can apply API signature only on specific endpoints::
 
     from simple_api_signing.common.rest_permission import SASigningPermission
@@ -52,3 +53,17 @@ Instead of adding this to ``DEFAULT_PERMISSION_CLASSES``, you can apply API sign
     class MyAPIViewSet(ViewSet):
         permission_classes = (SASigningPermission,)
         ....
+
+Use SASigning Directly with Django, without DRF
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This package also is compatible using only django, without django rest framework.
+
+Instead of putting the ``permission_class`` in ``settings.py`` we have to add **SASigningMiddleware** to the ``MIDDLEWARE`` setting like this:
+
+**NOTE: Using it as a middleware will apply signature verification over all the Django views, endpoints and requests.**::
+
+    MIDDLEWARE = [
+        ..,
+        'simple_api_signing.common.middleware.SASigningMiddleware',
+    ]

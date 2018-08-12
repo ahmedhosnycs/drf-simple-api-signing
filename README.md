@@ -48,7 +48,7 @@ import hashlib
 import hmac
 from base64 import b64encode
 
-data = ''.join([path, method])
+data = ''.join([path, method, secret])
 computed_sig = hmac.new(
                 secret.encode('utf-8'), 
                 msg=data.encode('utf-8'),
@@ -60,7 +60,7 @@ b64encode(computed_sig).decode()
 NodeJS:
 ```
 var cryto = require('crypto');
-var data = path + '' + method
+var data = path + '' + method + '' + secret
 var hash = crypto.createHmac('sha256', secret).update(data);
 hash.digest('base64');
 ```

@@ -1,4 +1,4 @@
-# Simple API Signing for Django (SASigning)
+# DRF Simple API Signing (SASigning)
 ![](https://travis-ci.org/ahmedhosnycs/drf-simple-api-signing.svg?branch=master)
 [![Documentation Status](https://readthedocs.org/projects/drf-simple-api-signing/badge/?version=latest)](https://drf-simple-api-signing.readthedocs.io/en/latest/?badge=latest)
 
